@@ -1,6 +1,1 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-    }
-}
-rootProject.name = 'imagesplitter'
+rootProject.name = projectName
