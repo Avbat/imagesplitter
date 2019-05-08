@@ -1,1 +1,6 @@
-
+---
+server:
+  port: ${SERVER_PORT} # Порт приложения
+---
+saver:
+  filepath: ${SAVER_FILEPATH}

@@ -17,3 +17,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
+
+// Сборка артифактов, подцепит параметры из bootRun
+artifacts {
+    archives bootJar
+}
+
+// Запуск задачи по сборке проекта на локальной машине,
+// Указываем переменные окружения для запуска локально.
+bootRun {
+    environment "SERVER_PORT", "8086"
+    environment "SAVER_FILEPATH", "D:\\NoWork\\tmp"
+}
