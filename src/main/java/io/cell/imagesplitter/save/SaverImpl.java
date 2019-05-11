@@ -1,4 +1,4 @@
-package io.cell.imagesplitter;
+package io.cell.imagesplitter.save;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,8 +10,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
 
 @Service
@@ -25,19 +24,29 @@ public class SaverImpl implements Saver {
   String filepath;
 
   @Override
-  public boolean save(Map<String, BufferedImage> images) {
-    List<String> savedFiles = new ArrayList<>();
+  public SaveResult save(Map<String, BufferedImage> images) {
+    SaveResult saveResult = new SaveResult();
     images.forEach((filename, image) -> {
       String fullName = filepath + File.separatorChar + filename + "." + FILE_FORMAT;
       File outputfile = new File(fullName);
       try {
         ImageIO.write(image, FILE_FORMAT, outputfile);
         LOG.debug("The file '{}' is saved.", fullName);
-        savedFiles.add(fullName);
+        saveResult.getSavedFiles().add(filename + "." + FILE_FORMAT);
       } catch (IOException e) {
         LOG.error("The file '{}' could not be saved.", fullName, e);
       }
     });
-    return savedFiles.size() == images.size();
+    return saveResult
+        .setCount(saveResult.getSavedFiles().size())
+        .setSaved(saveResult.getSavedFiles().size() == images.size());
+  }
+
+  public SaveResult buildErrorResult(String message) {
+    return new SaveResult()
+        .setSaved(false)
+        .setCount(0)
+        .setMessage(message)
+        .setSavedFiles(Collections.EMPTY_LIST);
   }
 }
